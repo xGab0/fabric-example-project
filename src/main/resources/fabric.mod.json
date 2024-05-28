@@ -19,10 +19,10 @@
       "com.example.ExampleMod"
     ],
     "client": [
-      "com.example.ExampleModClient"
+      "com.example.examplemod.client.ExampleModClient"
     ],
     "server": [
-      "com.example.ExampleModDedicatedServer"
+      "com.example.examplemod.server.ExampleModDedicatedServer"
     ],
     "preLaunch": [
       "com.example.ExampleModPreLaunch"

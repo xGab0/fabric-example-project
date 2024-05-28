@@ -6,6 +6,13 @@ plugins {
 version = findProperty("mod_version")!!
 group = findProperty("maven_group")!!
 
+repositories {
+    maven {
+        name = "Modrinth"
+        url = uri("https://api.modrinth.com/maven")
+    }
+}
+
 dependencies {
     val minecraft_version = findProperty("minecraft_version")
     val yarn_mappings = findProperty("yarn_mappings")
@@ -20,6 +27,25 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation("net.fabricmc.fabric-api:fabric-api:$fabric_version")
+
+    // Fabric API. Instead of the entire API you can instead import single modules
+    // Modules: https://github.com/FabricMC/fabric
+    //modImplementation(fabricApi.module("fabric-data-generation-api-v1", "$fabric_version"))
+    //modImplementation(fabricApi.module("fabric-item-api-v1", "$fabric_version"))
+    //modImplementation(fabricApi.module("fabric-networking-api-v1", "$fabric_version"))
+
+    // Add mods to dev environment, change 'modImplementation' to
+    // 'modCompileOnly' to test without the mod or annotate them
+    //
+    // The dependency structure is "{mod_name}:{version_number}
+    // the mod name is the one in the Modrinth URL and the
+    // version number is in the Metadata section at the bottom
+    // of the download page of a version
+    modImplementation("maven.modrinth:modmenu:10.0.0-beta.1")
+    modImplementation("maven.modrinth:sodium:mc1.20.6-0.5.8")
+    modImplementation("maven.modrinth:lithium:mc1.20.6-0.12.3")
+    modImplementation("maven.modrinth:ferrite-core:6.1.1-fabric")
+    modImplementation("maven.modrinth:immediatelyfast:1.2.15+1.20.6-fabric")
 }
 
 java {
@@ -87,8 +113,12 @@ java {
     withSourcesJar()
 }
 
+// https://fabricmc.net/wiki/documentation:fabric_loom
 loom {
-    accessWidenerPath = file("src/main/resources/examplemod.accesswidener")
+    val mod_name = findProperty("mod_name")
+
+    accessWidenerPath = file("src/main/resources/$mod_name.accesswidener")
+    mixin.defaultRefmapName = "mixins.$mod_name.refmap.json"
 }
 
 // configure the maven publication
