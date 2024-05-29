@@ -89,16 +89,18 @@ java {
     tasks.withType<ProcessResources> {
         filteringCharset = "UTF-8"
 
+        // exclude fabric.mod.json in resources if you are
+        // generating it with the resource-factory plugin
+        exclude("fabric.mod.json")
+
         // Use the entire following code only if you will not generate the file using
         // the generator but will use the existing file in the resource folder
+
+        /*
         val minecraft_version = findProperty("minecraft_version")
         val yarn_mappings = findProperty("yarn_mappings")
         val loader_version = findProperty("loader_version")
         val fabric_version = findProperty("fabric_version")
-
-        // exclude fabric.mod.json in resources if you are
-        // generating it with the resource-factory plugin
-        exclude("fabric.mod.json")
 
         inputs.property("version", project.version)
         inputs.property("minecraft_version", minecraft_version)
@@ -115,6 +117,7 @@ java {
                 "fabric_version" to fabric_version
             ))
         }
+        */
     }
 
     // Loom will automatically attach sourcesJar to a RemapSourcesJar task
