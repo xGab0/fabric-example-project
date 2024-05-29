@@ -1,7 +1,13 @@
+import xyz.jpenilla.resourcefactory.fabric.Environment
+
 plugins {
     // docs: https://fabricmc.net/wiki/documentation:fabric_loom
     // source: https://github.com/FabricMC/fabric-loom
     id("fabric-loom") version "1.6-SNAPSHOT"
+
+    // https://github.com/jpenilla/resource-factory
+    // Generates fabric.mod.json based on the Gradle config
+    id("xyz.jpenilla.resource-factory-fabric-convention") version "1.1.1"
 
     id("maven-publish")
 }
@@ -83,10 +89,16 @@ java {
     tasks.withType<ProcessResources> {
         filteringCharset = "UTF-8"
 
+        // Use the entire following code only if you will not generate the file using
+        // the generator but will use the existing file in the resource folder
         val minecraft_version = findProperty("minecraft_version")
         val yarn_mappings = findProperty("yarn_mappings")
         val loader_version = findProperty("loader_version")
         val fabric_version = findProperty("fabric_version")
+
+        // exclude fabric.mod.json in resources if you are
+        // generating it with the resource-factory plugin
+        exclude("fabric.mod.json")
 
         inputs.property("version", project.version)
         inputs.property("minecraft_version", minecraft_version)
@@ -118,6 +130,52 @@ loom {
 
     accessWidenerPath = file("src/main/resources/$mod_name.accesswidener")
     mixin.defaultRefmapName = "mixins.$mod_name.refmap.json"
+}
+
+// https://github.com/jpenilla/resource-factory/blob/master/tester/build.gradle.kts
+fabricModJson {
+    val minecraft_version = findProperty("minecraft_version")
+    val yarn_mappings = findProperty("yarn_mappings")
+    val loader_version = findProperty("loader_version")
+    val fabric_version = findProperty("fabric_version")
+
+    id = "examplemod"
+    version = "${project.version}"
+    environment = Environment.ANY
+    name = "Example Fabric mod"
+    description = "This is an example description! Tell everyone what your mod is about!"
+
+    author("Me!")
+    contact {
+        homepage =  "https://fabricmc.net/"
+        sources = "https://github.com/xGab0/fabric-example-project"
+    }
+    icon("icon.png")
+    license("CC0-1.0")
+
+    entrypoint("main", "com.example.ExampleMod")
+    entrypoint("client", "com.example.examplemod.client.ExampleModClient")
+    entrypoint("server", "com.example.examplemod.server.ExampleModDedicatedServer")
+    entrypoint("preLaunch", "com.example.ExampleModPreLaunch")
+
+    mixin("examplemod.mixins.json") {
+        environment = Environment.ANY
+    }
+
+    mixin("examplemod.client.mixins.json") {
+        environment = Environment.CLIENT
+    }
+
+    mixin("examplemod.server.mixins.json") {
+        environment = Environment.SERVER
+    }
+
+    depends("fabricloader", ">=$loader_version")
+    depends("minecraft", ">=$minecraft_version")
+    depends("java", ">=21")
+    depends("fabric-api", "*")
+
+    suggests("another-mod", "*")
 }
 
 // configure the maven publication
