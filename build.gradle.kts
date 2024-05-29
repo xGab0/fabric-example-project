@@ -1,5 +1,8 @@
 plugins {
+    // docs: https://fabricmc.net/wiki/documentation:fabric_loom
+    // source: https://github.com/FabricMC/fabric-loom
     id("fabric-loom") version "1.6-SNAPSHOT"
+
     id("maven-publish")
 }
 
@@ -121,8 +124,11 @@ loom {
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            //artifactId = project.archives_base_name
-            //from components.java
+            //groupId = "com.example"
+            artifactId = project.name
+            //version = "${project.version}"
+
+            from(components["java"])
 
             //artifact(tasks.remapJar)
             //artifact(tasks.remapSourcesJar)
