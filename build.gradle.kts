@@ -12,10 +12,17 @@ plugins {
     id("maven-publish")
 }
 
-version = findProperty("mod_version")!!
-group = findProperty("maven_group")!!
+base {
+    version = findProperty("mod_version")!!
+    group = findProperty("maven_group")!!
+    archivesName = "fabric-example-project"
+}
 
 repositories {
+    maven {
+        name = "Fabric"
+        url  = uri("https://maven.fabricmc.net/")
+    }
     maven {
         name = "Modrinth"
         url = uri("https://api.modrinth.com/maven")
@@ -182,6 +189,7 @@ fabricModJson {
 }
 
 // configure the maven publication
+// https://docs.gradle.org/current/userguide/publishing_maven.html
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
