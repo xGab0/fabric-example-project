@@ -67,10 +67,6 @@ java {
         options.encoding = "UTF-8"
     }
 
-    tasks.withType<ProcessResources> {
-        filteringCharset = "UTF-8"
-    }
-
     tasks.withType<Jar> {
         from("LICENSE")
     }
