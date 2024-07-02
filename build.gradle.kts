@@ -3,7 +3,7 @@ import xyz.jpenilla.resourcefactory.fabric.Environment
 plugins {
     // docs: https://fabricmc.net/wiki/documentation:fabric_loom
     // source: https://github.com/FabricMC/fabric-loom
-    id("fabric-loom") version "1.6-SNAPSHOT"
+    id("fabric-loom") version "1.7-SNAPSHOT"
 
     // https://github.com/jpenilla/resource-factory
     // Generates fabric.mod.json based on the Gradle config
